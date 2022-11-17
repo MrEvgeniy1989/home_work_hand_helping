@@ -1,15 +1,15 @@
 import React, {useState} from 'react';
 import './App.css';
-import {Country} from "./Country";
+import {Country} from './Country';
 
-export type BanknotsType = '' // создадим типы для banknotes -он может быть 'Dollars', 'RUBLS' или 'All'
+export type BanknotsType = 'Dollars' | 'RUBLS' | 'All'
 export type MoneyType = {
     banknotes: BanknotsType
-    value: any// не ленимся, убираем заглушку, и пишем правильный тип)
-    number: any// ложку за Димыча, за...
+    value: number// не ленимся, убираем заглушку, и пишем правильный тип)
+    number: string// ложку за Димыча, за...
 }
 
-let defaultMoney: any = [  // типизируем
+let defaultMoney: MoneyType[] = [  // типизируем
     {banknotes: 'Dollars', value: 100, number: ' a1234567890'},
     {banknotes: 'Dollars', value: 50, number: ' z1234567890'},
     {banknotes: 'RUBLS', value: 100, number: ' w1234567890'},
@@ -21,19 +21,25 @@ let defaultMoney: any = [  // типизируем
 ]
 
 // типизируем на входе и выходе
-export const moneyFilter = (money: any, filter: any): any => {
+export const moneyFilter = (money: MoneyType[], filterValue: BanknotsType): MoneyType[] => {
+
+    if (filterValue === 'All') {
+        return defaultMoney
+    }
+    return money.filter(el => el.banknotes === filterValue)
     //если пришел filter со значением 'All', то возвращаем все банкноты
     //return money.filter... ну да, придется фильтровать
 }
 
 function App() {
     // убираем заглушки в типизации и вставляем в качестве инициализационного значения defaultMoney
-    const [money, setMoney] = useState<any>([])
-    const [filter, setFilter] = useState<any>('')   // по умолчанию указываем все банкноты
+    const [money, setMoney] = useState<MoneyType[]>(defaultMoney)
+    const [filter, setFilter] = useState<BanknotsType>('All')   // по умолчанию указываем все банкноты
 
     // а вот сейчас притормаживаем. И вдумчиво: константа filteredMoney получает результат функции moneyFilter
     // в функцию передаем деньги и фильтр, по которому ихбудем выдавать(ретёрнуть)
-    const filteredMoney = moneyFilter(грошы, фильтръ)
+    const filteredMoney = moneyFilter(money, filter)
+    console.log(filteredMoney)
     return (
         <div className="App">
             <Country
